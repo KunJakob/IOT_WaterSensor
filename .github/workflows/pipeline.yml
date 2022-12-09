@@ -87,16 +87,10 @@ jobs:
         id: create-db-secret
 
       - name: Add HiveMQ Helm Repository 
-        uses: WyriHaximus/github-action-helm3@v2.0
-        with:
-          exec: helm repo add hivemq https://hivemq.github.io/helm-charts
-          kubeconfig: "${{ secrets.KUBECONFIG }}"
+        run:  helm repo add hivemq https://hivemq.github.io/helm-charts
 
       - name: Install HiveMQ Helm Chart
-        uses: WyriHaximus/github-action-helm3@v2.0
-        with:
-          exec: helm upgrade --install -f k8/hivemq-values.yml hivemq hivemq/hivemq-operator
-          kubeconfig: "${{ secrets.KUBECONFIG }}"
+        run:  helm upgrade --install -f k8/hivemq-values.yml hivemq hivemq/hivemq-operator
 
       - name: Deploy manifests
         uses: Azure/k8s-deploy@v3.1
