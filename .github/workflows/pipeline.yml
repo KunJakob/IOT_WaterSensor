@@ -90,7 +90,7 @@ jobs:
         run:  helm repo add hivemq https://hivemq.github.io/helm-charts
 
       - name: Install HiveMQ Helm Chart
-        run:  helm upgrade --install -f k8/hivemq-values.yml hivemq hivemq/hivemq-operator
+        run:  helm upgrade --install -f k8/hive/values.yml hivemq hivemq/hivemq-operator
 
       - name: Deploy manifests
         uses: Azure/k8s-deploy@v3.1
@@ -104,6 +104,7 @@ jobs:
             k8/web/iotweb-deployment.yml
             k8/web/iotweb-service.yml
             k8/web/iotweb-ingress.yml
+            k8/hive/mqtt-ingress.yml
 
           images: ${{ needs.build.outputs.tags }}
           imagepullsecrets: |
