@@ -10,4 +10,5 @@ metadata:
 data:
   MSSQL_HOST: mssql
   MSSQL_PORT: "1433"
-  MQTT_BROKER: "wss://hivemq-hivemq-mqtt-ws:8000/mqtt"
+  MQTT_Broker: "hivemq-hivemq-mqtt"
+  MQTT_Broker_Port: "1883"
