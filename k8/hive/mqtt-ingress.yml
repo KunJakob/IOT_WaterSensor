@@ -19,9 +19,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: iotweb-svc
+                name: hivemq-hivemq-mqtt-ws
                 port:
-                  number: 1883
+                  number: 8000
   tls:
     - hosts:
       - mqtt.iot.heldgaard.dev
