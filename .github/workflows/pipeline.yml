@@ -86,7 +86,7 @@ jobs:
           data: ${{ secrets.MSSQL_SECRET }}
         id: create-db-secret
 
-      - name: Add HiveMQ Helm Repository
+      - name: Add HiveMQ Helm Repository 
         uses: WyriHaximus/github-action-helm3@v2.0
         with:
           exec: helm repo add hivemq https://hivemq.github.io/helm-charts
