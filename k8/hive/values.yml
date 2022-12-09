@@ -1,4 +1,23 @@
+global:
+  rbac:
+    pspEnabled: false
 hivemq:
+  listenerConfiguration: |
+    <tcp-listener>
+        <port>${HIVEMQ_MQTT_PORT}</port>
+        <bind-address>0.0.0.0</bind-address>
+    </tcp-listener>
+    <websocket-listener>
+          <port>8000</port>
+          <bind-address>0.0.0.0</bind-address>
+          <path>/mqtt</path>
+          <name>my-websocket-listener</name>
+          <subprotocols>
+              <subprotocol>mqttv3.1</subprotocol>
+              <subprotocol>mqtt</subprotocol>
+          </subprotocols>
+          <allow-extensions>true</allow-extensions>
+      </websocket-listener>
   nodeCount: "1"
   cpu: "1"
   memory: "200Mi"
@@ -7,18 +26,23 @@ hivemq:
   memoryLimitRatio: "1"
   ephemeralStorageLimitRatio: "1"
   ports:
-   - name: "mqtt"
-     port: 1883
-     expose: true
-     patch:
-     - '[{"op":"add","path":"/spec/selector/hivemq.com~1node-offline","value":"false"},{"op":"add","path":"/metadata/annotations","value":{"service.spec.externalTrafficPolicy":"Local"}}]'
-     # If you want Kubernetes to expose the MQTT port
-     # - '[{"op":"add","path":"/spec/type","value":"LoadBalancer"}]'
-   - name: "cc"
-     port: 8080
-     expose: true
-     patch:
-     - '[{"op":"add","path":"/spec/sessionAffinity","value":"ClientIP"}]'
-     # If you want Kubernetes to expose the HiveMQ control center via a load balancer.
-     # Warning: You should consider configuring proper security and TLS beforehand. Ingress may be a better option here.
-     # - '[{"op":"add","path":"/spec/type","value":"LoadBalancer"}]'
+    - name: "mqtt"
+      port: 1883
+      expose: true
+      patch:
+        - '[{"op":"add","path":"/spec/selector/hivemq.com~1node-offline","value":"false"},{"op":"add","path":"/metadata/annotations","value":{"service.spec.externalTrafficPolicy":"Local"}}]'
+      # If you want Kubernetes to expose the MQTT port
+      # - '[{"op":"add","path":"/spec/type","value":"LoadBalancer"}]'
+    - name: "cc"
+      port: 8080
+      expose: true
+      patch:
+        - '[{"op":"add","path":"/spec/sessionAffinity","value":"ClientIP"}]'
+      # If you want Kubernetes to expose the HiveMQ control center via a load balancer.
+      # Warning: You should consider configuring proper security and TLS beforehand. Ingress may be a better option here.
+      # - '[{"op":"add","path":"/spec/type","value":"LoadBalancer"}]
+    - name: "mqtt-ws"
+      port: 8000
+      expose: true
+      patch:
+        - '[{"op":"add","path":"/spec/selector/hivemq.com~1node-offline","value":"false"},{"op":"add","path":"/metadata/annotations","value":{"service.spec.externalTrafficPolicy":"Local"}}]'
