@@ -100,10 +100,11 @@ jobs:
             k8/db/mssql-config.yml
             k8/db/mssql-deployment.yml
             k8/db/mssql-service.yml
-            k8/db/mssql-ingress.yml
+            k8/db/mssql-pvc-pv.yml
             k8/web/iotweb-deployment.yml
             k8/web/iotweb-service.yml
             k8/web/iotweb-ingress.yml
+            k8/web/iotweb-config.yml
             k8/hive/mqtt-ingress.yml
 
           images: ${{ needs.build.outputs.tags }}
