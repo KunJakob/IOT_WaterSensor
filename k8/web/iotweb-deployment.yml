@@ -27,6 +27,6 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mssql-secret
-                  key: password     
+                  key: password
       imagePullSecrets:
         - name: iotcred

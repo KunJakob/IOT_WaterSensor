@@ -25,7 +25,7 @@ public class MqttHandler
         _mqttClient = mqttFactory.CreateMqttClient();
         
         var mqttClientOptions = new MqttClientOptionsBuilder()
-            .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
+            .WithWebScketServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
             .Build();
 
         _mqttClient.ApplicationMessageReceivedAsync += 
