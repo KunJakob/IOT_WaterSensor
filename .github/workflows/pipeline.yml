@@ -4,7 +4,7 @@ on:
     branches: ["main"]
 env:
   REGISTRY: ghcr.io
-  PREFIX: smell-ya-later/IOT_WaterSensor
+  PREFIX: KunJakob/IOT_WaterSensor
 jobs:
   build:
     name: "🛠️ Build"
