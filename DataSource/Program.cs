@@ -1,22 +1,22 @@
-﻿using System.Text;
-using MQTTnet;
+﻿using MQTTnet;
 using MQTTnet.Client;
+using Newtonsoft.Json;
 
 namespace DataSource;
 
 class Program
 {
     
-    private static Dictionary<Guid, int> _guids = new() {
-        {Guid.Parse("0ddc7bef-865f-42ba-85b6-1de78b3df96f"), 70},
-        {Guid.Parse("b9d8a995-3328-4bc2-abeb-7c1106b1c172"), 50},
+    private static Dictionary<Guid, int> _guids = new Dictionary<Guid, int> {
+        {Guid.Parse("913c70fb-365b-48f8-b6e8-42c5ca71fbbe"), 70},
+        {Guid.Parse("a90b5f11-a675-4523-89c2-84b7ff9f0935"), 50},
         {Guid.Parse("2a7f264d-b158-4d10-b6a9-cc9b5dd8b726"), 30}};
     
     public static async Task Main(string[] args)
     {
         var mqttFactory = new MqttFactory();
         var random = new Random();
-        /*
+
         for (;;)
         {
             using var mqttClient = mqttFactory.CreateMqttClient();
@@ -24,8 +24,6 @@ class Program
             var mqttClientOptions = new MqttClientOptionsBuilder()
                 .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
                 .Build();
-
-            mqttClient.ApplicationMessageReceivedAsync += ConsumePublishedMessage;
 
             await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
@@ -49,49 +47,5 @@ class Program
             Console.WriteLine("MQTT application message is published.");
             Thread.Sleep(1000);
         }
-        */
-        using var mqttClient = mqttFactory.CreateMqttClient();
-            
-        var mqttClientOptions = new MqttClientOptionsBuilder()
-            .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
-            .Build();
-
-        mqttClient.ApplicationMessageReceivedAsync += ConsumePublishedMessage;
-
-        await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-
-        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-            .Build();
-
-        foreach (var topic in _guids.Select(guid => new MqttTopicFilterBuilder().WithTopic(guid.Key.ToString())).Select(topicBuilder => topicBuilder.Build()))
-        {
-            mqttSubscribeOptions.TopicFilters.Add(topic);
-        }
-        
-        await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-
-        foreach (var guid in _guids)
-        {
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic("bind")
-                .WithPayload(guid.Key.ToString())
-                .Build();
-            await mqttClient.PublishAsync(message, CancellationToken.None);
-        }
-
-        Console.WriteLine("MQTT application message is published.");
-        var manualResetEvent = new ManualResetEvent(false);
-        manualResetEvent.WaitOne();
-        
-        await mqttClient.DisconnectAsync();
-    }
-    
-    private static async Task ConsumePublishedMessage(MqttApplicationMessageReceivedEventArgs e)
-    {
-        var message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-        
-        if (!_guids.ContainsKey(Guid.Parse(e.ApplicationMessage.Topic))) return;
-        
-        Console.WriteLine("Binding key is: " + message);
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @using IOT_WateringSensor.Database
+@using IOT_WateringSensor.DeviceController
 @using Microsoft.AspNetCore.Components
 @inject WaterSensorDbContext dBContext
 @inject IHttpContextAccessor HttpContextAccessor
@@ -42,13 +43,7 @@
 	[Parameter]
 	public bool failed { get; set; } = false;
 
-	public class RegisterDeviceRequest
-	{
-		public string? deviceId { get; set; }
-		public string? bindingKey { get; set; }
-	}
-
-	RegisterDeviceRequest exampleModel = new();
+	DeviceController.RegisterDeviceRequest exampleModel = new();
 	
 	async void HandleValidSubmit()
 	{

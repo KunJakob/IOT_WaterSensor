@@ -49,6 +49,27 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
 
+app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), blazor =>
+{
+    blazor.UseEndpoints(endpoints =>
+    {
+        endpoints.MapFallbackToPage("/_Host");
+    });
+});
+
+//explicitly map api endpoints only when path starts with api
+app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/api"), api =>
+{
+    api.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+});
+/*
+await using (var scope = builder.Services.BuildServiceProvider().GetRequiredService<WaterSensorDbContext>())
+{
+    await scope.Database.EnsureCreatedAsync();
+}
+*/
 app.Run();
