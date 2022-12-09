@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: iotweb
-          image: ghcr.io/smell-ya-later/iot_watersensor:VERSION
+          image: ghcr.io/kunjakob/iot_watersensor:VERSION
           ports:
             - containerPort: 80
           envFrom:
