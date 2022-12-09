@@ -22,7 +22,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: iotweb-config
-            - secretRef:
           env:
             - name: SA_PASSWORD
               valueFrom:
